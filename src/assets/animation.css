@@ -1,0 +1,138 @@
+/*fade*/
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+.fade-enter-active {
+    animation: fadeInRight .5s;
+}
+
+@keyframes fadeOutLeft {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+.fade-leave-active {
+    animation: fadeOutLeft .5s;
+}
+
+/*zoom*/
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale3d(.3, .3, .3);
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+.zoom-enter-active {
+    animation: zoomIn .5s;
+}
+
+@keyframes zoomOut {
+    from {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+        transform: scale3d(.3, .3, .3);
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+.zoom-leave-active {
+    animation: zoomOut .5s;
+}
+
+/*slide*/
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+.slide-enter-active {
+    animation: slideInRight .5s;
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+.slide-leave-active {
+    animation: slideOutLeft .5s;
+}
+
+/*transparent*/
+@keyframes transparentIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+.transparent-enter-active {
+    animation: transparentIn .5s;
+}
+
+@keyframes transparentOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+.transparent-leave-active {
+    animation: transparentOut .5s;
+}
+
+/*carousel*/
+.carousel-enter-active {
+    transition: all 1s ease;
+    transform: translateX(0);
+}
+
+.carousel-leave-active {
+    transition: all 1s ease;
+    transform: translateX(-100%);
+}
+
+.carousel-enter {
+    transform: translateX(100%);
+}
+
+.carousel-leave {
+    transform: translateX(0);
+}
