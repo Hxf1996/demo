@@ -31,13 +31,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         new webpack.DefinePlugin({
             'process.env': env,
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-            },
-            sourceMap: config.build.productionSourceMap,
-            parallel: true,
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false,
+        //     },
+        //     sourceMap: config.build.productionSourceMap,
+        //     parallel: true,
+        // }),
         new ExtractTextPlugin({
             filename: utils.assetsPath('css/[name].[contenthash].css'),
             allChunks: false,
