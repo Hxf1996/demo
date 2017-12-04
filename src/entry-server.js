@@ -1,26 +1,51 @@
-import createApp from './main';
+import {
+    createApp,
+} from './main';
 
-export default context =>
-    // 因为有可能会是异步路由钩子函数或组件，所以我们将返回一个 Promise，
-    // 以便服务器能够等待所有的内容在渲染前，
-    // 就已经准备就绪。
-    new Promise((resolve, reject) => {
-        const {
-            app,
+const isDev = process.env.NODE_ENV !== 'production';
+
+export default context => new Promise((resolve, reject) => {
+    const s = isDev && Date.now();
+    const {
+        app,
+        router,
+        store,
+    } = createApp();
+    const {
+        url,
+    } = context;
+    const {
+        fullPath,
+    } = router.resolve(url).route;
+
+    if (fullPath !== url) {
+        return reject(new Error({
+            url: fullPath,
+        }));
+    }
+
+    router.push(url);
+
+    router.onReady(() => {
+        const matchedComponents = router.getMatchedComponents();
+        // no matched routes
+        if (!matchedComponents.length) {
+            return reject(new Error({
+                code: 404,
+            }));
+        }
+        return Promise.all(matchedComponents.map(({
+            asyncData,
+        }) => asyncData && asyncData({
             store,
-            router,
-        } = createApp();
-        // 设置服务器端 router 的位置
-        router.push(context.url);
-        // 等到 router 将可能的异步组件和钩子函数解析完
-        router.onReady(() => {
-            const matchedComponents = router.getMatchedComponents();
-            // 匹配不到的路由，执行 reject 函数，并返回 404
-            if (!matchedComponents.length) {
-                Promise.reject(new Error('404'));
+            route: router.currentRoute,
+        }))).then(() => {
+            if (isDev) {
+                console.log(`data pre-fetch: ${Date.now() - s}ms`);
             }
             context.state = store.state;
-            // Promise 应该 resolve 应用程序实例，以便它可以渲染
             resolve(app);
-        }, reject);
-    });
+        }).catch(reject);
+    }, reject);
+    return true;
+});

@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -31,13 +32,16 @@ const webpackConfig = merge(baseWebpackConfig, {
         new webpack.DefinePlugin({
             'process.env': env,
         }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false,
-        //     },
-        //     sourceMap: config.build.productionSourceMap,
-        //     parallel: true,
-        // }),
+        new UglifyJsPlugin({
+            compress: {
+                warnings: false,
+            },
+            sourceMap: config.build.productionSourceMap,
+            parallel: true,
+            uglifyOptions: {
+                ecma: 8
+            },
+        }),
         new ExtractTextPlugin({
             filename: utils.assetsPath('css/[name].[contenthash].css'),
             allChunks: false,
