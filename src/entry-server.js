@@ -28,7 +28,7 @@ export default context => new Promise((resolve, reject) => {
 
     router.onReady(() => {
         const matchedComponents = router.getMatchedComponents();
-        // no matched routes
+
         if (!matchedComponents.length) {
             return reject(new Error({
                 code: 404,

@@ -17,7 +17,7 @@ function resolve(dir) {
 module.exports = merge(resolveWebpackConfig, {
     context: path.resolve(__dirname, '../'),
     entry: {
-        app: './src/entry-client.js',
+        app: './src/main.js',
     },
     output: {
         path: config.build.assetsRoot,

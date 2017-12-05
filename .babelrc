@@ -5,6 +5,8 @@
     "plugins": [
         "@babel/syntax-dynamic-import",
         "@babel/proposal-object-rest-spread",
-        "@babel/transform-runtime"
+        ["@babel/transform-runtime", {
+            "moduleName": "@babel/runtime"
+        }]
     ]
 }

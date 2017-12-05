@@ -6,10 +6,9 @@
     "private": true,
     "scripts": {
         "dev": "webpack-dev-server --inline --progress --config webpack/webpack.dev.conf.js",
-        "start": "npm run dev",
         "lint": "eslint --ext .js,.vue src",
         "build": "npm run build:client && npm run build:server",
-        "build:client": "webpack --config webpack/webpack.prod.conf.js --progress --hide-modules",
+        "build:client": "webpack --config webpack/webpack.client.conf.js --progress --hide-modules",
         "build:server": "webpack --config webpack/webpack.server.conf.js --progress --hide-modules"
     },
     "dependencies": {
@@ -28,7 +27,6 @@
         "@babel/register": "7.0.0-beta.34",
         "babel-eslint": "^8.0.3",
         "babel-loader": "8.0.0-beta.0",
-        "babel-preset-minify": "0.2.0",
         "chalk": "^2.3.0",
         "compression": "1.7.1",
         "copy-webpack-plugin": "^4.2.3",
@@ -46,6 +44,7 @@
         "file-loader": "1.1.5",
         "friendly-errors-webpack-plugin": "1.6.1",
         "html-webpack-plugin": "2.30.1",
+        "koa": "^2.4.1",
         "koa-static": "^4.0.2",
         "node-notifier": "5.1.2",
         "optimize-css-assets-webpack-plugin": "3.2.0",

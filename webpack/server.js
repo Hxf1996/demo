@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const LRU = require('lru-cache');
-const express = require('express');
-const favicon = require('serve-favicon');
+const Koa = require('koa');
 const compression = require('compression');
 const microcache = require('route-cache');
 const {
@@ -10,13 +9,9 @@ const {
 } = require('vue-server-renderer');
 
 const resolve = file => path.resolve(__dirname, file);
-const app = express();
 
 const isProd = process.env.NODE_ENV === 'production';
-const useMicroCache = process.env.MICRO_CACHE !== 'false';
-const serverInfo =
-    `express/${require('express/package.json').version} ` +
-    `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
+const app = new Koa();
 
 function createRenderer(bundle, options) {
     return createBundleRenderer(bundle, Object.assign(options, {
@@ -62,7 +57,7 @@ app.use('/static', serve('./dist/static', true));
 app.use('/manifest.json', serve('./dist/manifest.json', true));
 app.use('/service-worker.js', serve('./dist/service-worker.js'));
 
-app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl));
+app.use(microcache.cacheSeconds(1, req => req.originalUrl));
 
 function render(req, res) {
     const s = Date.now();

@@ -56,21 +56,6 @@ const webpackConfig = merge(baseWebpackConfig, {
                 safe: true,
             },
         }),
-        // new HtmlWebpackPlugin({
-        //     filename: config.build.index,
-        //     template: 'index.html',
-        //     inject: true,
-        //     minify: {
-        //         removeComments: true,
-        //         collapseWhitespace: true,
-        //         removeAttributeQuotes: true,
-        //     },
-        //     chunksSortMode: 'dependency',
-        //     serviceWorkerLoader: `<script>${utils.loadMinified(path.join(
-        //         __dirname,
-        //         './service-worker-prod.js',
-        //     ))}</script>`,
-        // }),
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.optimize.CommonsChunkPlugin({

@@ -8,8 +8,7 @@
     );
 
     window.addEventListener('load', function() {
-        if ('serviceWorker' in navigator &&
-            (window.location.protocol === 'https:' || isLocalhost)) {
+        if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || isLocalhost)) {
             navigator.serviceWorker.register('service-worker.js')
                 .then(function(registration) {
                     registration.onupdatefound = function() {
