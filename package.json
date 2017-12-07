@@ -76,7 +76,5 @@
         "node": ">= 4.0.0",
         "npm": ">= 3.0.0"
     },
-    "browserslist": [
-        "last 1 Chrome versions"
-    ]
+    "browserslist": ["last 1 Chrome versions"]
 }
