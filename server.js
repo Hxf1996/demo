@@ -37,7 +37,7 @@ if (isProd) {
         clientManifest,
     });
 } else {
-    readyPromise = require('./dist/setup-dev-server')(
+    readyPromise = require('./webpack/setup-dev-server')(
         app,
         templatePath,
         (bundle, options) => {
@@ -46,20 +46,16 @@ if (isProd) {
     );
 }
 
-const serve = (path, cache) => express.static(resolve(path), {
-    maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0,
-});
-
 app.use(compression({
     threshold: 0,
 }));
-app.use('/static', serve('./dist/static', true));
-app.use('/manifest.json', serve('./dist/manifest.json', true));
-app.use('/service-worker.js', serve('./dist/service-worker.js'));
+app.use(require('koa-static')('./dist', {
+    maxAge: isProd ? 1000 * 60 * 60 * 24 * 30 : 0,
+}));
 
 app.use(microcache.cacheSeconds(1, req => req.originalUrl));
 
-function render(req, res) {
+function render(res) {
     const s = Date.now();
 
     res.setHeader('Content-Type', 'text/html');
@@ -72,14 +68,12 @@ function render(req, res) {
             res.status(404).send('404 | Page Not Found');
         } else {
             res.status(500).send('500 | Internal Server Error');
-            console.error(`error during render : ${req.url}`);
             console.error(err.stack);
         }
     };
 
     const context = {
         title: 'Vue HN 2.0',
-        url: req.url,
     };
 
     renderer.renderToString(context, (err, html) => {
@@ -93,8 +87,8 @@ function render(req, res) {
     });
 }
 
-app.get('*', isProd ? render : (req, res) => {
-    readyPromise.then(() => render(req, res));
+app.use(async (ctx) => {
+    await readyPromise.then(() => render(ctx));
 });
 
 const port = process.env.PORT || 8081;

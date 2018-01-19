@@ -14,6 +14,17 @@ function resolve(dir) {
     return path.join(__dirname, '..', dir);
 }
 
+const createLintingRule = () => ({
+    test: /\.(js|vue)$/,
+    loader: 'eslint-loader',
+    enforce: 'pre',
+    include: [resolve('src')],
+    options: {
+        formatter: require('eslint-friendly-formatter'),
+        emitWarning: !config.dev.showEslintErrorsInOverlay
+    }
+})
+
 module.exports = merge(resolveWebpackConfig, {
     context: path.resolve(__dirname, '../'),
     entry: {
@@ -26,16 +37,7 @@ module.exports = merge(resolveWebpackConfig, {
     },
     module: {
         rules: [
-            ...((isPro && config.dev.useEslint) ? [{
-                test: /\.(js|vue)$/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                include: [resolve('src')],
-                options: {
-                    formatter: require('eslint-friendly-formatter'),
-                    emitWarning: !config.dev.showEslintErrorsInOverlay,
-                },
-            }] : []),
+            ...(config.dev.useEslint ? [createLintingRule()] : []),
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
@@ -44,7 +46,7 @@ module.exports = merge(resolveWebpackConfig, {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                include: [resolve('src')],
+                include: [resolve('src'), resolve('node_modules/webpack-dev-server/client')],
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -72,4 +74,12 @@ module.exports = merge(resolveWebpackConfig, {
             },
         ],
     },
+    node: {
+        setImmediate: false,
+        dgram: 'empty',
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        child_process: 'empty'
+    }
 });

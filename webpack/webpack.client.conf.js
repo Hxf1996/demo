@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
@@ -25,20 +24,20 @@ const webpackConfig = merge(baseWebpackConfig, {
     devtool: config.build.productionSourceMap ? config.build.devtool : false,
     output: {
         path: config.build.assetsRoot,
-        filename: utils.assetsPath('js/[name].[chunkhash].js'),
-        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+        filename: utils.assetsPath('js/[name].[hash].js'),
+        chunkFilename: utils.assetsPath('js/[id].[hash].js'),
     },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': env,
         }),
         new UglifyJsPlugin({
-            compress: {
-                warnings: false,
-            },
             sourceMap: config.build.productionSourceMap,
             parallel: true,
             uglifyOptions: {
+                compress: {
+                    warnings: false
+                },
                 ecma: 8
             },
         }),

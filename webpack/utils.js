@@ -4,7 +4,7 @@ const UglifyJS = require('uglify-es');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = require('../config');
-const pkg = require('../package.json');
+const packageConfig = require('../package.json');
 
 exports.assetsPath = (_path) => {
     const assetsSubDirectory = process.env.NODE_ENV === 'production' ?
@@ -80,7 +80,7 @@ exports.createNotifierCallback = () => {
         const filename = error.file && error.file.split('!').pop();
 
         notifier.notify({
-            title: pkg.name,
+            title: packageConfig.name,
             message: `${severity}: ${error.name}`,
             subtitle: filename || '',
             icon: path.join(__dirname, 'logo.png'),

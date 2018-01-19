@@ -3,8 +3,8 @@ const path = require('path')
 const MFS = require('memory-fs')
 const webpack = require('webpack')
 const chokidar = require('chokidar')
-const clientConfig = require('./webpack.client.config')
-const serverConfig = require('./webpack.server.config')
+const clientConfig = require('./webpack.client.conf')
+const serverConfig = require('./webpack.server.conf')
 
 const readFile = (fs, file) => {
     try {
@@ -41,7 +41,6 @@ module.exports = function setupDevServer(app, templatePath, cb) {
 
     // modify client config to work with hot middleware
     clientConfig.entry.app = ['webpack-hot-middleware/client', clientConfig.entry.app]
-    clientConfig.output.filename = '[name].js'
     clientConfig.plugins.push(
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
@@ -49,6 +48,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
 
     // dev middleware
     const clientCompiler = webpack(clientConfig)
+
     const devMiddleware = require('webpack-dev-middleware')(clientCompiler, {
         publicPath: clientConfig.output.publicPath,
         noInfo: true
@@ -66,10 +66,22 @@ module.exports = function setupDevServer(app, templatePath, cb) {
         update()
     })
 
+    const hotMiddleware = (clientCompiler, opts) => {
+        const middleware = require('webpack-hot-middleware')(clientCompiler, opts);
+        return async (ctx, next) => {
+            let stream = new require('stream').PassThrough()
+            ctx.body = stream
+            await middleware(ctx.req, {
+                write: stream.write.bind(stream),
+                writeHead: (status, headers) => {
+                    ctx.status = status
+                    ctx.set(headers)
+                }
+            }, next)
+        }
+    }
     // hot middleware
-    app.use(require('webpack-hot-middleware')(clientCompiler, {
-        heartbeat: 5000
-    }))
+    app.use(require("webpack-hot-middleware")(clientCompiler))
 
     // watch and update server renderer
     const serverCompiler = webpack(serverConfig)

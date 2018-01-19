@@ -1,13 +1,13 @@
 <template>
     <div id="app">
         <img src="./assets/logo.png">
-        <router-view/>
+        <routerView/>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'app',
+    name: 'App',
 };
 </script>
 

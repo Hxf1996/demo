@@ -1,36 +1,37 @@
 module.exports = {
     root: true,
-    parser: 'babel-eslint',
     parserOptions: {
-        sourceType: 'module'
+        parser: 'babel-eslint',
     },
     env: {
         browser: true,
     },
-    extends: 'airbnb-base',
+    extends: ['plugin:vue/recommended', 'airbnb-base'],
     plugins: [
-        'html'
+        'vue',
     ],
     'settings': {
         'import/resolver': {
             'webpack': {
-                'config': 'webpack/webpack.resolve.conf.js'
-            }
-        }
+                'config': 'webpack/webpack.resolve.conf.js',
+            },
+        },
     },
     'rules': {
         'import/extensions': ['error', 'always', {
             'js': 'never',
-            'vue': 'never'
+            'vue': 'never',
         }],
-        'import/no-extraneous-dependencies': ['error', {
-            'optionalDependencies': ['test/unit/index.js']
+        'no-param-reassign': ['error', {
+            props: true,
+            ignorePropertyModificationsFor: [
+                'state',
+                'acc',
+                'e',
+            ],
         }],
-        'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+        'vue/html-indent': ['error', 4],
         'indent': ['error', 4],
         'no-shadow': 'off',
-        'no-param-reassign': ["error", {
-            "props": false
-        }]
-    }
-}
+    },
+};

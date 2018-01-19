@@ -14,9 +14,9 @@ module.exports = {
         poll: false,
         useEslint: true,
         showEslintErrorsInOverlay: false,
-        devtool: 'eval-source-map',
+        devtool: 'cheap-module-eval-source-map',
         cacheBusting: true,
-        cssSourceMap: false,
+        cssSourceMap: true,
     },
     build: {
         index: path.resolve(__dirname, '../dist/index.html'),
